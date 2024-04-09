@@ -1,9 +1,19 @@
-from functools import wraps
+import functools
+import time
 
 def do_twice(func):
-    @wraps(func)
+    @functools.wraps(func)
     def wrapper_do_twice(*args, **kwargs):
-        result = func(*args, **kwargs)
         func(*args, **kwargs)
-        return result
+        return func(*args, **kwargs)
     return wrapper_do_twice
+
+def timer(func):
+    @functools.wraps(func)
+    def wrapper_timer(*args, **kwargs):
+        start_time = time.perf_counter()
+        value = func(*args, **kwargs)
+        end_time = time.perf_counter()
+        print(f"finished execution of {func.__name__} in {end_time-start_time: .4f} seconds")
+        return value
+    return wrapper_timer
